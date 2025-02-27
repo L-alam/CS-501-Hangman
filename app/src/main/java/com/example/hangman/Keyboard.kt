@@ -15,7 +15,7 @@ fun Keyboard(
     val letters = ('A'..'Z').toList()
 
     Column {
-        for (row in letters.chunked(7)) { // Splitting buttons into rows
+        for (row in letters.chunked(6)) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 row.forEach { letter ->
                     LetterButton(letter, guessedLetters.contains(letter), onLetterClick)
