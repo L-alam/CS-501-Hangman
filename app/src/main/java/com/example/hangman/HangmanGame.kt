@@ -17,6 +17,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,13 +37,13 @@ import kotlinx.coroutines.delay
 
 
 @Composable
-fun HangmanGame(){
+fun HangmanGame() {
     val words = listOf("BOSTON", "CAMBRIDGE", "CHICAGO", "MANHATTAN")
-    var selectedWord by remember { mutableStateOf(words.random()) }
-    var guessedLetters by remember { mutableStateOf(setOf<Char>()) }
-    var incorrectGuesses by remember { mutableStateOf(0) }
-    var hintClicks by remember { mutableStateOf(0) }
-    val maxIncorrectGuesses = 6
+
+    var selectedWord by rememberSaveable { mutableStateOf(words.random()) }
+    var guessedLetters by rememberSaveable { mutableStateOf(setOf<Char>()) }
+    var incorrectGuesses by rememberSaveable { mutableStateOf(0) }
+    var hintClicks by rememberSaveable { mutableStateOf(0) }
 
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -59,7 +60,13 @@ fun HangmanGame(){
                 })
                 HintPanel(hintClicks, guessedLetters, selectedWord, onHintUsed = {
                     hintClicks++
-                    if (hintClicks == 2 || hintClicks == 3) incorrectGuesses++
+                    if (hintClicks == 2){
+                        SecondHint(selectedWord, guessedLetters) { guessedLetters = it }
+                        incorrectGuesses++
+                    } else if (hintClicks == 3){
+                        ThirdHint(selectedWord, guessedLetters) { guessedLetters = it }
+                        incorrectGuesses++
+                    }
                 })
             }
         }
@@ -95,7 +102,6 @@ fun HangmanGame(){
             color = Color.White  // Explicitly set white text
         )
     }
-
 }
 
 @Composable

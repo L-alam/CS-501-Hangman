@@ -37,3 +37,27 @@ fun HintPanel(
         Text("Hint: Revealing vowels.")
     }
 }
+
+fun SecondHint(
+    selectedWord: String,
+    guessedLetters: Set<Char>,
+    onUpdateGuessedLetters: (Set<Char>) -> Unit
+) {
+    val remainingIncorrectLetters = ('A'..'Z')
+        .filter { it !in selectedWord && it !in guessedLetters }
+
+    val lettersToDisable = remainingIncorrectLetters.shuffled().take(remainingIncorrectLetters.size / 2)
+
+    onUpdateGuessedLetters(guessedLetters + lettersToDisable)
+}
+
+fun ThirdHint(
+    selectedWord: String,
+    guessedLetters: Set<Char>,
+    onUpdateGuessedLetters: (Set<Char>) -> Unit
+) {
+    val vowels = setOf('A', 'E', 'I', 'O', 'U')
+    val vowelsInWord = selectedWord.toSet().intersect(vowels)
+
+    onUpdateGuessedLetters(guessedLetters + vowelsInWord)
+}

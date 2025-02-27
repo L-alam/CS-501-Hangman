@@ -18,7 +18,7 @@ fun Keyboard(
         for (row in letters.chunked(6)) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 row.forEach { letter ->
-                    LetterButton(letter, guessedLetters.contains(letter), onLetterClick)
+                    LetterButton(letter, isDisabled = guessedLetters.contains(letter), onLetterClick)
                 }
             }
         }
